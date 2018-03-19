@@ -79,7 +79,7 @@ unspec(Buffer, Size) ->
   <<_Skip:(Size)/binary, Rest/binary>> = Buffer,
   {ok, #{
     body => Rest,
-    header => #proxy{inet = "UNSPECIFIED", vsn = "2"}
+    header => #proxy{inet = "UNKNOWN", vsn = "2"}
   }}.
 
 ipv4(<<One, Two, Three, Four>>) -> {One, Two, Three, Four}.
