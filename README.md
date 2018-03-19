@@ -18,6 +18,8 @@ containing `ok` or `error` and the second containing a map with the following ke
   body: The rest of the request (binary)
 
   header: Contains a record with the following schema
+
+  ```
     {
       dest_address: (IPAddress tuple, or binary)
       dest_port: (Integer or undefined),
@@ -26,6 +28,7 @@ containing `ok` or `error` and the second containing a map with the following ke
       src_port (Integer or undefined),
       vsn: string in ["1", "2"]
     }
+  ```
 
   message: (only for errors)
     The reason why there was an error
