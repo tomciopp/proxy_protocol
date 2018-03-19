@@ -1,0 +1,1 @@
+-record(proxy, {dest_address, dest_port, inet, src_address, src_port, vsn}).

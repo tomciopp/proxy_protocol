@@ -1,0 +1,13 @@
+{application, proxy_protocol, [
+  {description, "Parses HAProxy's proxy protocol"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, { sample_app, []}},
+  {applications, [kernel, stdlib]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, ["Thomas Cioppettini"]},
+  {licenses, ["MIT"]},
+  {links, []}
+]}.
