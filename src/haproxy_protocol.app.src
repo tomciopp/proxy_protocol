@@ -1,4 +1,4 @@
-{application, proxy_protocol, [
+{application, haproxy_protocol, [
   {description, "Parses HAProxy's proxy protocol"},
   {vsn, "0.1.0"},
   {registered, []},

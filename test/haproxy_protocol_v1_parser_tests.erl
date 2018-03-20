@@ -1,4 +1,4 @@
--module(proxy_protocol_v1_parser_tests).
+-module(haproxy_protocol_v1_parser_tests).
 
 -compile(export_all).
 
@@ -8,7 +8,7 @@
 
 tcp4_success_test() ->
   Packet = "PROXY TCP4 192.168.0.1 192.168.0.11 56324 443\r\nGET / HTTP/1.1\r",
-  {ok, Map} = proxy_protocol_v1_parser:parse(list_to_binary(Packet)),
+  {ok, Map} = haproxy_protocol_v1_parser:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r">>, maps:get(body, Map)),
@@ -21,7 +21,7 @@ tcp4_success_test() ->
 
 tcp4_address_failure_test() ->
   Packet = "PROXY TCP4 192.1638.0.1 192.168.0.11 56324 443\r\nGET / HTTP/1.1\r",
-  {error, Map} = proxy_protocol_v1_parser:parse(list_to_binary(Packet)),
+  {error, Map} = haproxy_protocol_v1_parser:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"192.1638.0.1 192.168.0.11 56324 443\r\nGET / HTTP/1.1\r">>, maps:get(body, Map)),
@@ -34,7 +34,7 @@ tcp4_address_failure_test() ->
 
 tcp4_port_failure_test() ->
   Packet = "PROXY TCP4 192.168.0.1 192.168.0.11 1111111 443\r\nGET / HTTP/1.1\r",
-  {error, Map} = proxy_protocol_v1_parser:parse(list_to_binary(Packet)),
+  {error, Map} = haproxy_protocol_v1_parser:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"1111111 443\r\nGET / HTTP/1.1\r">>, maps:get(body, Map)),
@@ -47,7 +47,7 @@ tcp4_port_failure_test() ->
 
 tcp6_success_test() ->
   Packet = "PROXY TCP6 2001:0db8:0000:0042:0000:8a2e:0370:7334 2001:0db8:0000:0042:0000:8a2e:0370:7335 4124 443\r\nGET / HTTP/1.1\r",
-  {ok, Map} = proxy_protocol_v1_parser:parse(list_to_binary(Packet)),
+  {ok, Map} = haproxy_protocol_v1_parser:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r">>, maps:get(body, Map)),
@@ -60,7 +60,7 @@ tcp6_success_test() ->
 
 tcp6_address_failure_test() ->
   Packet = "PROXY TCP6 2001:0db8:0000:0042:0000:8a2e:0370:7334 2001:0db8:00;0:0042:0000:8a2e:0370:7335 4124 443\r\nGET / HTTP/1.1\r",
-  {error, Map} = proxy_protocol_v1_parser:parse(list_to_binary(Packet)),
+  {error, Map} = haproxy_protocol_v1_parser:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"2001:0db8:00;0:0042:0000:8a2e:0370:7335 4124 443\r\nGET / HTTP/1.1\r">>, maps:get(body, Map)),
@@ -73,7 +73,7 @@ tcp6_address_failure_test() ->
 
 tcp6_port_failure_test() ->
   Packet = "PROXY TCP6 2001:0db8:0000:0042:0000:8a2e:0370:7334 2001:0db8:0000:0042:0000:8a2e:0370:7335 4124 foo\r\nGET / HTTP/1.1\r",
-  {error, Map} = proxy_protocol_v1_parser:parse(list_to_binary(Packet)),
+  {error, Map} = haproxy_protocol_v1_parser:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"foo\r\nGET / HTTP/1.1\r">>, maps:get(body, Map)),
@@ -86,7 +86,7 @@ tcp6_port_failure_test() ->
 
 unknown_extra_data_test() ->
   Packet = "PROXY UNKNOWN 4124 443\r\nGET / HTTP/1.1\r",
-  {ok, Map} = proxy_protocol_v1_parser:parse(list_to_binary(Packet)),
+  {ok, Map} = haproxy_protocol_v1_parser:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r">>, maps:get(body, Map)),
@@ -99,7 +99,7 @@ unknown_extra_data_test() ->
 
 unknown_crlf_test() ->
   Packet = "PROXY UNKNOWN\r\nGET / HTTP/1.1\r",
-  {ok, Map} = proxy_protocol_v1_parser:parse(list_to_binary(Packet)),
+  {ok, Map} = haproxy_protocol_v1_parser:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r">>, maps:get(body, Map)),

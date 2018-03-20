@@ -1,4 +1,4 @@
--module(proxy_protocol_v2_parser).
+-module(haproxy_protocol_v2_parser).
 
 -include("proxy.hrl").
 

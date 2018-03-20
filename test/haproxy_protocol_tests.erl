@@ -1,4 +1,4 @@
--module(proxy_protocol_tests).
+-module(haproxy_protocol_tests).
 
 -compile(export_all).
 
@@ -8,7 +8,7 @@
 
 v1_parser_test() ->
   Packet = "PROXY TCP4 192.168.0.1 192.168.0.11 56324 443\r\nGET / HTTP/1.1\r",
-  {ok, Map} = proxy_protocol:parse(list_to_binary(Packet)),
+  {ok, Map} = haproxy_protocol:parse(list_to_binary(Packet)),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r">>, maps:get(body, Map)),
@@ -30,7 +30,7 @@ v2_parser_test() ->
   Packet = <<Signature/binary, Length/binary, SrcAddress/binary,
     DestAddress/binary, SrcPort/binary, DestPort/binary, Request/binary>>,
 
-  {ok, Map} = proxy_protocol:parse(Packet),
+  {ok, Map} = haproxy_protocol:parse(Packet),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
@@ -42,7 +42,7 @@ v2_parser_test() ->
   ?assertEqual(Proxy#proxy.vsn, "2").
 
 no_proxy_test() ->
-  {ok, Map} = proxy_protocol:parse(<<"GET / HTTP/1.1\r\n">>),
+  {ok, Map} = haproxy_protocol:parse(<<"GET / HTTP/1.1\r\n">>),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),

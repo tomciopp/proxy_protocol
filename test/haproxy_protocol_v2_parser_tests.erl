@@ -1,4 +1,4 @@
--module(proxy_protocol_v2_parser_tests).
+-module(haproxy_protocol_v2_parser_tests).
 
 -compile(export_all).
 
@@ -17,7 +17,7 @@ tcp4_success_test() ->
   Packet = <<Signature/binary, Length/binary, SrcAddress/binary,
     DestAddress/binary, SrcPort/binary, DestPort/binary, Request/binary>>,
 
-  {ok, Map} = proxy_protocol_v2_parser:parse(Packet),
+  {ok, Map} = haproxy_protocol_v2_parser:parse(Packet),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
@@ -39,7 +39,7 @@ udp4_success_test() ->
   Packet = <<Signature/binary, Length/binary, SrcAddress/binary,
     DestAddress/binary, SrcPort/binary, DestPort/binary, Request/binary>>,
 
-  {ok, Map} = proxy_protocol_v2_parser:parse(Packet),
+  {ok, Map} = haproxy_protocol_v2_parser:parse(Packet),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
@@ -61,7 +61,7 @@ tcp6_success_test() ->
   Packet = <<Signature/binary, Length/binary, SrcAddress/binary,
     DestAddress/binary, SrcPort/binary, DestPort/binary, Request/binary>>,
 
-  {ok, Map} = proxy_protocol_v2_parser:parse(Packet),
+  {ok, Map} = haproxy_protocol_v2_parser:parse(Packet),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
@@ -83,7 +83,7 @@ udp6_success_test() ->
   Packet = <<Signature/binary, Length/binary, SrcAddress/binary,
     DestAddress/binary, SrcPort/binary, DestPort/binary, Request/binary>>,
 
-  {ok, Map} = proxy_protocol_v2_parser:parse(Packet),
+  {ok, Map} = haproxy_protocol_v2_parser:parse(Packet),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
@@ -105,7 +105,7 @@ stream_success_test() ->
   Packet = <<Signature/binary, Length/binary, SrcAddress/binary,
     DestAddress/binary, Request/binary>>,
 
-  {ok, Map} = proxy_protocol_v2_parser:parse(Packet),
+  {ok, Map} = haproxy_protocol_v2_parser:parse(Packet),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
@@ -127,7 +127,7 @@ dgram_success_test() ->
   Packet = <<Signature/binary, Length/binary, SrcAddress/binary,
     DestAddress/binary, Request/binary>>,
 
-  {ok, Map} = proxy_protocol_v2_parser:parse(Packet),
+  {ok, Map} = haproxy_protocol_v2_parser:parse(Packet),
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
