@@ -1,7 +1,5 @@
 -module(haproxy_protocol).
 
--include("proxy.hrl").
-
 -export([parse/1]).
 
 parse(Packet = <<"\n\r\n\r\0\n\rQUIT\n", _Rest/binary>>) ->
@@ -20,4 +18,14 @@ parse(Packet = <<"PROXY UNKNOWN\r\n", _Rest/binary>>) ->
   haproxy_protocol_v1_parser:parse(Packet);
 
 parse(Packet) ->
-  {ok, #{body => Packet, header => #proxy{}}}.
+  {ok, #{
+    body => Packet,
+    header => #{
+      dest_address => undefined,
+      dest_port => undefined,
+      inet => undefined,
+      src_address => undefined,
+      src_port => undefined,
+      vsn => undefined
+    }
+  }}.

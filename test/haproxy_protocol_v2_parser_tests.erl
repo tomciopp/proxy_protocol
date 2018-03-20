@@ -4,8 +4,6 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
--include("proxy.hrl").
-
 tcp4_success_test() ->
   Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 17>>,
   Length = <<0, 12>>,
@@ -21,12 +19,12 @@ tcp4_success_test() ->
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
-  ?assertEqual(Proxy#proxy.dest_address, {192, 168, 0, 1}),
-  ?assertEqual(Proxy#proxy.src_address, {127, 0, 0, 1}),
-  ?assertEqual(Proxy#proxy.dest_port, 443),
-  ?assertEqual(Proxy#proxy.src_port, 444),
-  ?assertEqual(Proxy#proxy.inet, "TCP4"),
-  ?assertEqual(Proxy#proxy.vsn, "2").
+  ?assertEqual(maps:get(dest_address, Proxy), {192, 168, 0, 1}),
+  ?assertEqual(maps:get(src_address, Proxy), {127, 0, 0, 1}),
+  ?assertEqual(maps:get(dest_port, Proxy), 443),
+  ?assertEqual(maps:get(src_port, Proxy), 444),
+  ?assertEqual(maps:get(inet, Proxy), "TCP4"),
+  ?assertEqual(maps:get(vsn, Proxy), "2").
 
 udp4_success_test() ->
   Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 18>>,
@@ -43,12 +41,12 @@ udp4_success_test() ->
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
-  ?assertEqual(Proxy#proxy.dest_address, {192, 168, 0, 1}),
-  ?assertEqual(Proxy#proxy.src_address, {127, 0, 0, 1}),
-  ?assertEqual(Proxy#proxy.dest_port, 443),
-  ?assertEqual(Proxy#proxy.src_port, 444),
-  ?assertEqual(Proxy#proxy.inet, "UDP4"),
-  ?assertEqual(Proxy#proxy.vsn, "2").
+  ?assertEqual(maps:get(dest_address, Proxy), {192, 168, 0, 1}),
+  ?assertEqual(maps:get(src_address, Proxy), {127, 0, 0, 1}),
+  ?assertEqual(maps:get(dest_port, Proxy), 443),
+  ?assertEqual(maps:get(src_port, Proxy), 444),
+  ?assertEqual(maps:get(inet, Proxy), "UDP4"),
+  ?assertEqual(maps:get(vsn, Proxy), "2").
 
 tcp6_success_test() ->
   Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 33>>,
@@ -65,12 +63,12 @@ tcp6_success_test() ->
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
-  ?assertEqual(Proxy#proxy.src_address, {5532, 4240, 1, 0, 0, 0, 0, 0}),
-  ?assertEqual(Proxy#proxy.dest_address, {8193, 3512, 1, 0, 0, 0, 0, 0}),
-  ?assertEqual(Proxy#proxy.src_port, 444),
-  ?assertEqual(Proxy#proxy.dest_port, 443),
-  ?assertEqual(Proxy#proxy.inet, "TCP6"),
-  ?assertEqual(Proxy#proxy.vsn, "2").
+  ?assertEqual(maps:get(src_address, Proxy), {5532, 4240, 1, 0, 0, 0, 0, 0}),
+  ?assertEqual(maps:get(dest_address, Proxy), {8193, 3512, 1, 0, 0, 0, 0, 0}),
+  ?assertEqual(maps:get(src_port, Proxy), 444),
+  ?assertEqual(maps:get(dest_port, Proxy), 443),
+  ?assertEqual(maps:get(inet, Proxy), "TCP6"),
+  ?assertEqual(maps:get(vsn, Proxy), "2").
 
 udp6_success_test() ->
   Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 34>>,
@@ -87,12 +85,12 @@ udp6_success_test() ->
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
-  ?assertEqual(Proxy#proxy.src_address, {5532, 4240, 1, 0, 0, 0, 0, 0}),
-  ?assertEqual(Proxy#proxy.dest_address, {8193, 3512, 1, 0, 0, 0, 0, 0}),
-  ?assertEqual(Proxy#proxy.src_port, 444),
-  ?assertEqual(Proxy#proxy.dest_port, 443),
-  ?assertEqual(Proxy#proxy.inet, "UDP6"),
-  ?assertEqual(Proxy#proxy.vsn, "2").
+  ?assertEqual(maps:get(src_address, Proxy), {5532, 4240, 1, 0, 0, 0, 0, 0}),
+  ?assertEqual(maps:get(dest_address, Proxy), {8193, 3512, 1, 0, 0, 0, 0, 0}),
+  ?assertEqual(maps:get(src_port, Proxy), 444),
+  ?assertEqual(maps:get(dest_port, Proxy), 443),
+  ?assertEqual(maps:get(inet, Proxy), "UDP6"),
+  ?assertEqual(maps:get(vsn, Proxy), "2").
 
 stream_success_test() ->
   Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 49>>,
@@ -109,12 +107,12 @@ stream_success_test() ->
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
-  ?assertEqual(Proxy#proxy.src_address, <<"/var/pgsql_sock">>),
-  ?assertEqual(Proxy#proxy.dest_address, <<"/var/pgsql_sock">>),
-  ?assertEqual(Proxy#proxy.src_port, undefined),
-  ?assertEqual(Proxy#proxy.dest_port, undefined),
-  ?assertEqual(Proxy#proxy.inet, "AF_UNIX"),
-  ?assertEqual(Proxy#proxy.vsn, "2").
+  ?assertEqual(maps:get(src_address, Proxy), <<"/var/pgsql_sock">>),
+  ?assertEqual(maps:get(dest_address, Proxy), <<"/var/pgsql_sock">>),
+  ?assertEqual(maps:get(src_port, Proxy), undefined),
+  ?assertEqual(maps:get(dest_port, Proxy), undefined),
+  ?assertEqual(maps:get(inet, Proxy), "AF_UNIX"),
+  ?assertEqual(maps:get(vsn, Proxy), "2").
 
 dgram_success_test() ->
   Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 50>>,
@@ -131,9 +129,9 @@ dgram_success_test() ->
   Proxy = maps:get(header, Map),
 
   ?assertEqual(<<"GET / HTTP/1.1\r\n">>, maps:get(body, Map)),
-  ?assertEqual(Proxy#proxy.src_address, <<"/var/pgsql_sock">>),
-  ?assertEqual(Proxy#proxy.dest_address, <<"/var/pgsql_sock">>),
-  ?assertEqual(Proxy#proxy.src_port, undefined),
-  ?assertEqual(Proxy#proxy.dest_port, undefined),
-  ?assertEqual(Proxy#proxy.inet, "AF_UNIX"),
-  ?assertEqual(Proxy#proxy.vsn, "2").
+  ?assertEqual(maps:get(src_address, Proxy), <<"/var/pgsql_sock">>),
+  ?assertEqual(maps:get(dest_address, Proxy), <<"/var/pgsql_sock">>),
+  ?assertEqual(maps:get(src_port, Proxy), undefined),
+  ?assertEqual(maps:get(dest_port, Proxy), undefined),
+  ?assertEqual(maps:get(inet, Proxy), "AF_UNIX"),
+  ?assertEqual(maps:get(vsn, Proxy), "2").

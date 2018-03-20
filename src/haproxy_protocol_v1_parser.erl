@@ -1,24 +1,35 @@
 -module(haproxy_protocol_v1_parser).
 
--include("proxy.hrl").
-
 -export([parse/1]).
 
-parse(Packet) -> inet(Packet, #proxy{vsn = "1"}).
+parse(Packet) -> inet(Packet, default_header()).
+
+default_header() ->
+  #{
+    dest_address => undefined,
+    dest_port => undefined,
+    inet => undefined,
+    src_address => undefined,
+    src_port => undefined,
+    vsn => "1"
+  }.
 
 inet(<<"PROXY TCP4 ", Rest/binary>>, Proxy) ->
-  src_address(Rest, Proxy#proxy{inet = "TCP4"});
+  src_address(Rest, maps:put(inet, "TCP4", Proxy));
 
 inet(<<"PROXY TCP6 ", Rest/binary>>, Proxy) ->
-  src_address(Rest, Proxy#proxy{inet = "TCP6"});
+  src_address(Rest, maps:put(inet, "TCP6", Proxy));
 
 inet(<<"PROXY UNKNOWN", Rest/binary>>, Proxy) ->
-  {ok, #{body => drop_line(Rest), header => Proxy#proxy{inet = "UNKNOWN"}}}.
+  {ok, #{
+    body => drop_line(Rest),
+    header => maps:put(inet, "UNKNOWN", Proxy)
+  }}.
 
 src_address(Buffer, Proxy) ->
   case find_ip(Buffer, Proxy) of
     {ok, Address, Rest} ->
-      dest_address(Rest, Proxy#proxy{src_address = Address});
+      dest_address(Rest, maps:put(src_address, Address, Proxy));
     {error, Message} ->
       {error, #{body => Buffer, header => Proxy, message => Message}}
   end.
@@ -26,7 +37,7 @@ src_address(Buffer, Proxy) ->
 dest_address(Buffer, Proxy) ->
   case find_ip(Buffer, Proxy) of
     {ok, Address, Rest} ->
-      src_port(Rest, Proxy#proxy{dest_address = Address});
+      src_port(Rest, maps:put(dest_address, Address, Proxy));
     {error, Message} ->
       {error, #{body => Buffer, header => Proxy, message => Message}}
   end.
@@ -34,7 +45,7 @@ dest_address(Buffer, Proxy) ->
 src_port(Buffer, Proxy) ->
   try find_port(Buffer) of
     {ok, Port, Rest} ->
-      dest_port(Rest, Proxy#proxy{src_port = Port});
+      dest_port(Rest, maps:put(src_port, Port, Proxy));
     {error, Message} ->
       {error, #{body => Buffer, header => Proxy, message => Message}}
   catch
@@ -49,7 +60,7 @@ src_port(Buffer, Proxy) ->
 dest_port(Buffer, Proxy) ->
   try find_port(Buffer) of
     {ok, Port, Rest} ->
-      {ok, #{body => Rest, header => Proxy#proxy{dest_port = Port}}};
+      {ok, #{body => Rest, header => maps:put(dest_port, Port, Proxy)}};
     {error, Message} ->
       {error, #{body => Buffer, header => Proxy, message => Message}}
   catch
@@ -61,8 +72,8 @@ dest_port(Buffer, Proxy) ->
       }}
   end.
 
-find_ip(Buffer, #proxy{inet = "TCP4"}) -> ipv4(Buffer);
-find_ip(Buffer, #proxy{inet = "TCP6"}) -> ipv6(Buffer).
+find_ip(Buffer, #{inet := "TCP4"}) -> ipv4(Buffer);
+find_ip(Buffer, #{inet := "TCP6"}) -> ipv6(Buffer).
 
 % IPv4 can be in the range of 0.0.0.0 - 255.255.255.255
 ipv4(<<Addr:7/binary,  32, Rest/binary>>) -> valid_ip(Addr, Rest);
@@ -128,4 +139,3 @@ valid_port(Port, Buffer) ->
 
 drop_line(<<13, 10, Rest/binary>>) -> Rest;
 drop_line(<<_Byte:1/binary, Rest/binary>>) -> drop_line(Rest).
-
