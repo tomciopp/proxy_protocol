@@ -2,6 +2,11 @@
 
 A pure erlang parser for HAProxy's proxy protocol standard
 
+## Warning
+
+This library is still in flux.
+It should not be considered stable until version 0.2.0 is released.
+
 ## Documentation
 
 The official documentation for the protocol can be found at
