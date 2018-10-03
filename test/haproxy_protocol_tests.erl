@@ -18,7 +18,7 @@ v1_parser_test() ->
   ?assertEqual(maps:get(vsn, Proxy), "1").
 
 v2_parser_test() ->
-  Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 17>>,
+  Signature = <<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 17>>,
   Length = <<0, 12>>,
   SrcAddress = <<127, 0, 0, 1>>,
   DestAddress = <<192, 168, 0, 1>>,

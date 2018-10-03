@@ -2,28 +2,28 @@
 
 -export([parse/1]).
 
-parse(<<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 17,
+parse(<<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 17,
   _Len:2/binary, Rest/binary>>) -> parse_ipv4("TCP4", Rest);
 
-parse(<<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 18,
+parse(<<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 18,
   _Len:2/binary, Rest/binary>>) -> parse_ipv4("UDP4", Rest);
 
-parse(<<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 33,
+parse(<<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 33,
   _Len:2/binary, Rest/binary>>) -> parse_ipv6("TCP6", Rest);
 
-parse(<<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 34,
+parse(<<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 34,
   _Len:2/binary, Rest/binary>>) -> parse_ipv6("UDP6", Rest);
 
-parse(<<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 49,
+parse(<<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 49,
   _Len:2/binary, Rest/binary>>) -> parse_unix(Rest);
 
-parse(<<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 50,
+parse(<<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 50,
   _Len:2/binary, Rest/binary>>) -> parse_unix(Rest);
 
-parse(<<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 0,
+parse(<<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 0,
   Len:2/binary, Rest/binary>>) -> unspec(Rest, uint16(Len));
 
-parse(<<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, _Proto:1/binary,
+parse(<<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, _Proto:1/binary,
   Len:2/binary, Rest/binary>>) -> unspec(Rest, uint16(Len));
 
 parse(Buffer) ->

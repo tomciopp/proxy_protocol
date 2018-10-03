@@ -5,7 +5,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 tcp4_success_test() ->
-  Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 17>>,
+  Signature = <<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 17>>,
   Length = <<0, 12>>,
   SrcAddress = <<127, 0, 0, 1>>,
   DestAddress = <<192, 168, 0, 1>>,
@@ -27,7 +27,7 @@ tcp4_success_test() ->
   ?assertEqual(maps:get(vsn, Proxy), "2").
 
 udp4_success_test() ->
-  Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 18>>,
+  Signature = <<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 18>>,
   Length = <<0, 12>>,
   SrcAddress = <<127, 0, 0, 1>>,
   DestAddress = <<192, 168, 0, 1>>,
@@ -49,7 +49,7 @@ udp4_success_test() ->
   ?assertEqual(maps:get(vsn, Proxy), "2").
 
 tcp6_success_test() ->
-  Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 33>>,
+  Signature = <<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 33>>,
   Length = <<0, 12>>,
   SrcAddress = <<21, 156, 16, 144, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>,
   DestAddress = <<32, 1, 13, 184, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>,
@@ -71,7 +71,7 @@ tcp6_success_test() ->
   ?assertEqual(maps:get(vsn, Proxy), "2").
 
 udp6_success_test() ->
-  Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 34>>,
+  Signature = <<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 34>>,
   Length = <<0, 12>>,
   SrcAddress = <<21, 156, 16, 144, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>,
   DestAddress = <<32, 1, 13, 184, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>>,
@@ -93,7 +93,7 @@ udp6_success_test() ->
   ?assertEqual(maps:get(vsn, Proxy), "2").
 
 stream_success_test() ->
-  Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 49>>,
+  Signature = <<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 49>>,
   Length = <<0, 12>>,
   Path = <<47, 118, 97, 114, 47, 112, 103, 115, 113, 108, 95, 115, 111, 99, 107, 0>>,
   Padding = list_to_binary(string:copies("0", 92)),
@@ -115,7 +115,7 @@ stream_success_test() ->
   ?assertEqual(maps:get(vsn, Proxy), "2").
 
 dgram_success_test() ->
-  Signature = <<10, 13, 10, 13, 0, 10, 13, 81, 85, 73, 84, 10, 50>>,
+  Signature = <<13, 10, 13, 10, 0, 13, 10, 81, 85, 73, 84, 10, 50>>,
   Length = <<0, 12>>,
   Path = <<47, 118, 97, 114, 47, 112, 103, 115, 113, 108, 95, 115, 111, 99, 107, 0>>,
   Padding = list_to_binary(string:copies("0", 92)),

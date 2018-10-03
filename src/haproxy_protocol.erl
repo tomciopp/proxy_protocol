@@ -2,7 +2,7 @@
 
 -export([parse/1]).
 
-parse(Packet = <<"\n\r\n\r\0\n\rQUIT\n", _Rest/binary>>) ->
+parse(Packet = <<"\r\n\r\n\0\r\nQUIT\n", _Rest/binary>>) ->
   haproxy_protocol_v2_parser:parse(Packet);
 
 parse(Packet = <<"PROXY TCP4 ", _Rest/binary>>) ->
